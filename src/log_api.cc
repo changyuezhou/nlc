@@ -1,7 +1,5 @@
-#include "commlib/public/inc/log.h"
-#include "commlib/public/inc/type.h"
-#include "commlib/log/inc/log.h"
 #include "commlib/log/inc/handleManager.h"
+#include "log.h"
 
 
 using lib::log::HandleManager;

@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 2.8.0)
+
+project(log)
+
+AUX_SOURCE_DIRECTORY(./inc DIR_LOG_INC)
+AUX_SOURCE_DIRECTORY(./src DIR_LOG_SRC)
+
+ADD_LIBRARY(log STATIC ${DIR_LOG_INC} ${DIR_LOG_SRC})
+
+ADD_SUBDIRECTORY(test)

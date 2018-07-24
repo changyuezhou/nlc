@@ -9,7 +9,7 @@ WORKDIR=${TOPDIR}/static/work
 DISTDIR=${TOPDIR}/static/dist
 DISTFILES=$(cat <<EOF
 http://zlib.net/zlib-1.2.8.tar.gz
-https://github.com/edenhill/librdkafka/archive/df3be26a76476d6271649c2340db7d1268b8aa46.tar.gz librdkafka-df3be26a76476d6271649c2340db7d1268b8aa46.tar.gz
+https://github.com/edenhill/librdkafka/archive/df3be26a76476d6271649c2340db7d1268b8aa46.tar.gz librdkafka-master.tar.gz
 https://github.com/google/protobuf/releases/download/v2.6.1/protobuf-2.6.1.tar.gz
 http://www.digip.org/jansson/releases/jansson-2.7.tar.gz
 EOF
@@ -160,8 +160,8 @@ build_lts() {
     export LDFLAGS="${LDFLAGS} -L${LIBDIR}/lib -L${COMMLIB} -lrt"
     cd ${OUTDIR} \
     && cmake -DCMAKE_INSTALL_PREFIX:PATH=${OUTDIR} \
-    -DPROTOBUF_LIBRARY=${LIBDIR}/lib64/libprotobuf.a -DPROTOBUF_INCLUDE_DIR=${LIBDIR}/include \
-    -DJANSSON_LIBRARY=${LIBDIR}/lib64/libjansson.a -DJANSSON_INCLUDE_DIR=${LIBDIR}/include \
+    -DPROTOBUF_LIBRARY=${LIBDIR}/lib/libprotobuf.a -DPROTOBUF_INCLUDE_DIR=${LIBDIR}/include \
+    -DJANSSON_LIBRARY=${LIBDIR}/lib/libjansson.a -DJANSSON_INCLUDE_DIR=${LIBDIR}/include \
     -DKAFKA_LIBRARY=${LIBDIR}/lib/librdkafka.a -DKAFKA_INCLUDE_DIR=${LIBDIR}/include \
     -DZLIB_LIBRARY=${LIBDIR}/lib/libz.a -DZLIB_INCLUDE_DIR=${LIBDIR}/include \
     -DCMAKE_BUILD_TYPE=Release ${TOPDIR} && make && make install

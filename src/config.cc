@@ -4,7 +4,7 @@
 #include "config.h"
 #include <string>
 #include <stdio.h>
-#include "commlib/public/inc/log.h"
+#include "log.h"
 
 namespace dsp {
   namespace lts {

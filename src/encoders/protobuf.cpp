@@ -21,7 +21,8 @@
 #include "http_query.h"
 
 // for global config
-#include "../lts.h"
+#include "lts.h"
+#include "log_api.h"
 
 #include <stdexcept>
 #include <stdlib.h>
@@ -32,7 +33,6 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <cstring>
-#include "../log_api.h"
 
 #define PROTOBUF_LOG_BUF_SIZE 1024
 

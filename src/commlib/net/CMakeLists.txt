@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 2.8.0)
+
+project(net)
+
+AUX_SOURCE_DIRECTORY(./inc DIR_NET_INC)
+AUX_SOURCE_DIRECTORY(./src DIR_NET_SRC)
+
+ADD_LIBRARY(net STATIC ${DIR_NET_INC} ${DIR_NET_SRC})
+
+ADD_SUBDIRECTORY(test)
