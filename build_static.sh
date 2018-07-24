@@ -9,7 +9,7 @@ WORKDIR=${TOPDIR}/static/work
 DISTDIR=${TOPDIR}/static/dist
 DISTFILES=$(cat <<EOF
 http://zlib.net/zlib-1.2.8.tar.gz
-https://github.com/edenhill/librdkafka/archive/df3be26a76476d6271649c2340db7d1268b8aa46.tar.gz librdkafka-master.tar.gz
+https://github.com/edenhill/librdkafka/archive/master.zip librdkafka-master.tar.gz
 https://github.com/google/protobuf/releases/download/v2.6.1/protobuf-2.6.1.tar.gz
 http://www.digip.org/jansson/releases/jansson-2.7.tar.gz
 EOF

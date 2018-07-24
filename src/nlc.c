@@ -194,14 +194,14 @@ void signal_callback_handler(int signum) {
 
 
 static void display_helper_info(char **argv) {
-  lts_log_error("Usage: %s -p <file.prop>"
+  lts_log_error("Usage: %s -p <file.conf>"
                 "\n"
                 "librdkafka version %s (0x%08x)\n"
                 "nlc version %s (tag: %s)\n"
                 "build time: %s\n"
                 "\n"
                 " Options:\n"
-                "  -p <file.prop>  lts properties file (default: lts.props)\n"
+                "  -p <file.conf>  lts properties file (default: lts.conf)\n"
                 "  -h Show this help\n"
                 "  -H Display rdkafka properties infromation \n"
                 "  -d Display loaded properties\n"
