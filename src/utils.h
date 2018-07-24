@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <time.h>
-#include "lts.h"
+#include "nlc.h"
 #include "encoders/encoders.h"
 
 int send_to_server(rd_kafka_t* rk, rd_kafka_topic_t* rkt, int32_t partition,

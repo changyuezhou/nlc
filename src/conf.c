@@ -7,7 +7,7 @@
 #include <limits.h>
 #include <syslog.h>
 
-#include "lts.h"
+#include "nlc.h"
 
 /**
  * lts global configuration

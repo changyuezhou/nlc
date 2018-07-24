@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 2.8)
-project (lts)
+project (nlc)
 # The version number.
-set (lts_VERSION_MAJOR 0)
-set (lts_VERSION_MINOR 1)
+set (NLC_VERSION_MAJOR 0)
+set (NLC_VERSION_MINOR 1)
 
 execute_process(
   COMMAND git describe --abbrev=12 --dirty --always
@@ -84,6 +84,6 @@ add_subdirectory (src)
 include (InstallRequiredSystemLibraries)
 set (CPACK_RESOURCE_FILE_LICENSE
      "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-set (CPACK_PACKAGE_VERSION_MAJOR "${lts_VERSION_MAJOR}")
-set (CPACK_PACKAGE_VERSION_MINOR "${lts_VERSION_MINOR}")
+set (CPACK_PACKAGE_VERSION_MAJOR "${NLC_VERSION_MAJOR}")
+set (CPACK_PACKAGE_VERSION_MINOR "${NLC_VERSION_MINOR}")
 include (CPack)

@@ -21,7 +21,7 @@
 #include "http_query.h"
 
 // for global config
-#include "lts.h"
+#include "nlc.h"
 #include "log_api.h"
 
 #include <stdexcept>

@@ -154,8 +154,8 @@ build_packages() {
     done
 }
 #export LDFLAGS="${LDFLAGS} -L${LIBDIR}/lib -L/bruce/project/test_lib/app/result/src -lrt"
-build_lts() {
-    echo "Build lts..."
+build_nlc() {
+    echo "Build nlc..."
     export CFLAGS="${CFLAGS} -I${LIBDIR}/include -I${COMMINC}/include"
     export LDFLAGS="${LDFLAGS} -L${LIBDIR}/lib -L${COMMLIB} -lrt"
     cd ${OUTDIR} \
@@ -167,6 +167,6 @@ build_lts() {
     -DCMAKE_BUILD_TYPE=Release ${TOPDIR} && make && make install
 }
 
-get_packages && build_packages && build_lts
+get_packages && build_packages && build_nlc
 
 
