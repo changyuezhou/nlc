@@ -57,14 +57,14 @@ find_library(LIBC libc.a)
 find_package(Protobuf REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${PROTOBUF_LIBRARY})
-find_package(ZLIB REQUIRED)
-set(LIBS ${LIBS} ${ZLIB_LIBRARIES})
 find_package(Jansson REQUIRED)
 include_directories(${JANSSON_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${JANSSON_LIBRARIES})
 find_package(KafkaC REQUIRED)
 include_directories(${KAFKA_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${KAFKA_LIBRARIES})
+find_package(ZLIB REQUIRED)
+set(LIBS ${LIBS} ${ZLIB_LIBRARIES})
 
 
 # configure a header file to pass some of the CMake settings
