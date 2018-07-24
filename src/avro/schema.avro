@@ -1,0 +1,13 @@
+{"type":"record","name":"testrec","fields":[
+ {"name":"a_null","type":"null"},
+ {"name":"a_bool","type":"boolean"},
+ {"name":"an_int","type":"int"},
+ {"name":"a_long","type":"long"},
+ {"name":"a_float","type":"float"},
+ {"name":"a_double","type":"double"},
+ {"name":"a_string","type":"string"},
+ {"name":"random_bytes","type":"bytes"},
+ {"name":"a_fixed","type":{"type":"fixed","size":3,"name":"four"}},
+ {"name":"an_int_array","type":{"type":"array","items":"int"}},
+ {"name":"a_float_map","type":{"type":"map","values":"float"}},
+ {"name":"null_default","type":["null","string"],"default":"null"}]}

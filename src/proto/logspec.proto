@@ -1,0 +1,13 @@
+package logspec;
+
+message LogLine {
+  enum Type {
+    IMPRESSION = 0;
+    CLICK = 1;
+    ACTION = 2;
+  }
+    required Type t = 1;
+    required string ts = 2;
+    required string cid = 3;
+}
+

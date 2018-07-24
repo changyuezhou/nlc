@@ -1,0 +1,11 @@
+{"type":"record","name":"logline","fields":[
+ {"name":"time","type":"string"},
+ {"name":"remote_addr","type":"string"},
+ {"name":"remote_user","type":"string"},
+ {"name":"body_bytes_sent","type":"int"},
+ {"name":"request_time","type":"string"},
+ {"name":"status","type":"string"},
+ {"name":"request","type":"string"},
+ {"name":"request_method","type":"string"},
+ {"name":"http_referrer","type":"string"},
+ {"name":"http_user_agent","type":"string"}]}
