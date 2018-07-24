@@ -10,17 +10,17 @@
 #include "nlc.h"
 
 /**
- * lts global configuration
+ * nlc global configuration
  */
 struct conf conf = { 0 };
 
 
 
-void init_default_config() {
+void load_default_conf() {
     /* Static configuration */
   conf.encoder = NULL;
   conf.topic = "";
-  conf.props = "lts.conf";
+  conf.props = "nlc.props";
   conf.comp_ext = ".COMPLETE";
   conf.comp_ext_len = strlen(conf.comp_ext);
   conf.prog_ext = ".PROGRESS";
@@ -38,8 +38,8 @@ void init_default_config() {
   conf.proto_key_type_name = NULL;
 }
 
-void display_pb_cofig() {
-  const char **array;
+void dump_conf() {
+  const char **arr;
   size_t cnt;
   int pass;
 
@@ -47,20 +47,20 @@ void display_pb_cofig() {
     size_t i;
 
     if (pass == 0) {
-      array = rd_kafka_conf_dump(conf.rk_conf, &cnt);
+      arr = rd_kafka_conf_dump(conf.rk_conf, &cnt);
       printf("# Global kafka config\n");
     } else {
       printf("# Topic kafka config\n");
-      array = rd_kafka_topic_conf_dump(conf.topic_conf, &cnt);
+      arr = rd_kafka_topic_conf_dump(conf.topic_conf, &cnt);
     }
 
-    for (i = 0; i < cnt; i += 2) printf("kafka.%s = %s\n", array[i], array[i + 1]);
+    for (i = 0; i < cnt; i += 2) printf("kafka.%s = %s\n", arr[i], arr[i + 1]);
 
     printf("\n");
 
-    rd_kafka_conf_dump_free(array, cnt);
+    rd_kafka_conf_dump_free(arr, cnt);
   }
-  printf("# lts config\n");
+  printf("# nlc config\n");
   printf("topic = %s\n", conf.topic);
   printf("watch.dir = %s\n", conf.watch_dir);
   printf("log.level = %i\n", conf.log_level);
@@ -152,7 +152,7 @@ static int conf_set(const char *name, const char *val, char *errstr,
   }
 
   if (ok) {
-   // printf("Added config option %s=%s\n", name, val);
+    printf("Added config option %s=%s\n", name, val);
     return 0;
   }
 
@@ -182,7 +182,7 @@ static int trim(char **sp, char *end) {
  * Returns 0 on success or -1 on failure.
  */
 
-int read_config_file(const char *path) {
+int conf_file_read(const char *path) {
   FILE *fp;
   char buf[512];
   char errstr[512];

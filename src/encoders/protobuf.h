@@ -11,15 +11,15 @@
 /*check for c++ compiler*/
 #ifdef __cplusplus
 extern "C" {
-struct KeyValueMsg encode_json2pb(const char* json, size_t n);
-struct KeyValueMsg encode_json2pb_dynamic(const char* json, size_t n);
-const char* decode_pb2json(const char* protobuf, size_t n);
-void init_protobuf_by_pbfile();
+struct KeyValueMsg encode_json_to_protobuf(const char* json, size_t n);
+struct KeyValueMsg encode_json_to_protobuf_dynamic(const char* json, size_t n);
+const char* decode_protobuf_to_json(const char* protobuf, size_t n);
+void initalize_dynamic_protobuf();
 }
 #endif
 #ifndef __cplusplus
-struct KeyValueMsg encode_json2pb(const char* json, size_t n);
-struct KeyValueMsg encode_json2pb_dynamic(const char* json, size_t n);
-const char* decode_pb2json(const char* protobuf, size_t n);
-void init_protobuf_by_pbfile();
+struct KeyValueMsg encode_json_to_protobuf(const char* json, size_t n);
+struct KeyValueMsg encode_json_to_protobuf_dynamic(const char* json, size_t n);
+const char* decode_protobuf_to_json(const char* protobuf, size_t n);
+void initalize_dynamic_protobuf();
 #endif

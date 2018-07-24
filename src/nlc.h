@@ -19,21 +19,21 @@
 #define CLR(lvl) (lvl == NLC_INFO) ? 32 : (lvl == NLC_ERROR) ? 31 : 36
 
 #define out(lvl) (lvl == NLC_DEBUG || lvl == NLC_ERROR) ? stderr : stdout 
-#define lts_print_log(lvl, ...) do { if(lvl >= conf.log_level) {                                                 \
+#define nlc_print_log(lvl, ...) do { if(lvl >= conf.log_level) {                                                 \
                                           fprintf(out(lvl), "\x1b[1;%dm:: %s :: %s :: ", CLR(lvl), NMN(lvl), __TIMESTAMP__);   \
                                           fprintf(out(lvl), __VA_ARGS__);                                        \
                                         }                                                                        \ 
                                     } while (0)
 
-#define lts_log_debug(...) lts_print_log(NLC_DEBUG, __VA_ARGS__)
-#define lts_log_info(...) lts_print_log(NLC_INFO, __VA_ARGS__)
-#define lts_log_error(...) lts_print_log(NLC_ERROR, __VA_ARGS__)
+#define nlc_log_debug(...) nlc_print_log(NLC_DEBUG, __VA_ARGS__)
+#define nlc_log_info(...) nlc_print_log(NLC_INFO, __VA_ARGS__)
+#define nlc_log_error(...) nlc_print_log(NLC_ERROR, __VA_ARGS__)
 
 
 #define EXT_RESERVE 10  // characters reserved for prog/comp file extension
 
 struct conf {
-  /* lts config */
+  /* nlc config */
   char* comp_ext;
   size_t comp_ext_len;
   char* prog_ext;
@@ -82,6 +82,6 @@ struct conf {
 extern struct conf conf;
 
 /* Conf.c */
-int read_config_file(const char* path);
-void display_pb_cofig();
-void init_default_config();
+int conf_file_read(const char* path);
+void dump_conf();
+void load_default_conf();

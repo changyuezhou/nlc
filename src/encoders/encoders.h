@@ -32,8 +32,8 @@ typedef struct KeyValueMsg (*encoder_type)(const char*, size_t);
 
 void free_kvm(struct KeyValueMsg* kvm);
 
-bool judge_kvm(const struct KeyValueMsg* kvm);
+bool valid_kvm(const struct KeyValueMsg* kvm);
 
 void print_encoder_names();
 
-encoder_type init_encoder_by_type(const char* option);
+encoder_type select_encoder(const char* option);

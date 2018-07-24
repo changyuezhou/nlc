@@ -1,0 +1,8 @@
+kafka.metadata.broker.list=localhost:9092
+topic=reporting_test
+watch.dir=logs/
+kafka.queue.buffering.max.messages=1000000
+kafka.message.send.max.retries=10000
+kafka.topic.request.required.acks=2
+kafka.socket.keepalive.enable=true
+encoder=identity

@@ -21,8 +21,7 @@
 #include "http_query.h"
 
 // for global config
-#include "nlc.h"
-#include "log_api.h"
+#include "../nlc.h"
 
 #include <stdexcept>
 #include <stdlib.h>
@@ -33,8 +32,6 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <cstring>
-
-#define PROTOBUF_LOG_BUF_SIZE 1024
 
 namespace {
 #include "bin2ascii.h"
@@ -405,7 +402,7 @@ std::string pb2json(const Message &msg) {
  *
  */
  extern "C" {
-  struct KeyValueMsg encode_json2pb(const char *json, size_t strlength) {
+  struct KeyValueMsg encode_json_to_protobuf(const char *json, size_t strlength) {
     logspec::LogLine msg;
     struct KeyValueMsg kvm = default_kvm;
     bool success = false;
@@ -438,49 +435,42 @@ std::string pb2json(const Message &msg) {
 }
 
 
-static int proto_file_filter(const struct dirent *entry) {
+static int proto_filter(const struct dirent *entry) {
   const char *result_prog = strstr(entry->d_name, ".proto");
   size_t length = strlen(entry->d_name); /* remove . and .. */
   return ((length > 2) && (result_prog ? 1 : 0));
 }
 
-void init_protobuf_by_pbfile() {
-	char log_buf[PROTOBUF_LOG_BUF_SIZE] = {0};
-  struct dirent **name_array;
-  int n, file_num = 0;
+void initalize_dynamic_protobuf() {
+  struct dirent **namelist;
+  int n, scandir_res = 0;
   assert(conf.proto_type_folder);
 
   dst->MapPath("", conf.proto_type_folder);
+  printf("Scanning %s for .proto files\n", conf.proto_type_folder);
 
-  file_num =
-      scandir(conf.proto_type_folder, &name_array, proto_file_filter, alphasort);
-  n = file_num;
+  scandir_res =
+      scandir(conf.proto_type_folder, &namelist, proto_filter, alphasort);
+  n = scandir_res;
   if (n < 0) {
-    //fprintf(stderr, "failed to scan protobuf folder %s\n", conf.proto_type_folder);
-    snprintf(log_buf, PROTOBUF_LOG_BUF_SIZE, "failed to scan protobuf folder %s", conf.proto_type_folder);
-		lts_public_log_error(log_buf);
+    fprintf(stderr, "failed to scan protobuf folder %s\n",
+            conf.proto_type_folder);
     exit(EXIT_FAILURE);
   } else if (n > 0) {
     while (n--) {
-      auto fd = imp->Import(name_array[n]->d_name);
+      printf("Importing %s\n", namelist[n]->d_name);
+      auto fd = imp->Import(namelist[n]->d_name);
       if (fd == NULL)
-      {
-      	//fprintf(stderr, "Failed to import %s\n", name_array[n]->d_name);
-				snprintf(log_buf, PROTOBUF_LOG_BUF_SIZE, "Failed to import %s", name_array[n]->d_name);
-				lts_public_log_warn(log_buf);
-				memset(log_buf, 0, PROTOBUF_LOG_BUF_SIZE);
-      }
-      free(name_array[n]);
+        fprintf(stderr, "Failed to import %s\n", namelist[n]->d_name);
+      free(namelist[n]);
     }
-    free(name_array);
+    free(namelist);
   }
 
   auto pool = imp->pool();
   auto msg_disc = pool->FindMessageTypeByName(conf.proto_type_name);
   if (msg_disc == NULL) {
-    //fprintf(stderr, "Failed to find type %s\n", conf.proto_type_name);
-		snprintf(log_buf, PROTOBUF_LOG_BUF_SIZE, "Failed to find type %s", conf.proto_type_name);
-		lts_public_log_error(log_buf);
+    fprintf(stderr, "Failed to find type %s\n", conf.proto_type_name);
     exit(EXIT_FAILURE);
   }
   msg_builder = dmf->GetPrototype(msg_disc);
@@ -488,37 +478,32 @@ void init_protobuf_by_pbfile() {
   if(conf.proto_key_type_name) {
     key_field = msg_builder->GetDescriptor()->FindFieldByName(conf.proto_key_type_name);
     if (key_field == NULL) {
-      //fprintf(stderr, "Failed to find key type %s\n", conf.proto_key_type_name);
-			snprintf(log_buf, PROTOBUF_LOG_BUF_SIZE, "Failed to find key type %s", conf.proto_key_type_name);
-			lts_public_log_error(log_buf);
-			exit(EXIT_FAILURE);
+      fprintf(stderr, "Failed to find key type %s\n", conf.proto_key_type_name);
+      exit(EXIT_FAILURE);
     }
   }
 }
 
 extern "C" {
-  struct KeyValueMsg encode_json2pb_dynamic(const char *json, size_t strlength) {
+  struct KeyValueMsg encode_json_to_protobuf_dynamic(const char *json, size_t strlength) {
     Message *msg = msg_builder->New();
     struct KeyValueMsg kvm = default_kvm;
-    bool status = false;
-    void *data = NULL;
+    bool success = false;
+    void *buffer = NULL;
 
-    size_t pb_data_len = strlength + 1;
-    char pb_data[pb_data_len];
+    size_t decode_len = strlength + 1;
+    char decoded[decode_len];
 
-    if (decode_url(pb_data, &pb_data_len, json, strlength)) {
+    if (decode_url(decoded, &decode_len, json, strlength)) {
       try {
-        json2pb(*msg, pb_data, strlen(pb_data));
-        status = true;
+        json2pb(*msg, decoded, strlen(decoded));
+        success = true;
       } catch (j2pb_error error) {
-        status = false;
+        success = false;
         std::cout << error.error() << std::endl;
-				char log_buf[] = {0};
-				snprintf(log_buf, PROTOBUF_LOG_BUF_SIZE, "json2pb failed!");
-				lts_public_log_error(log_buf);
       }
     }
-    if (status) {
+    if (success) {
       if (key_field) {
         auto key = _field2fieldv(*msg, key_field);
         kvm.key = key.data;
@@ -527,11 +512,11 @@ extern "C" {
       
       size_t size = msg->ByteSize();
 
-      data = malloc(size);
-      msg->SerializeToArray(data, size);
+      buffer = malloc(size);
+      msg->SerializeToArray(buffer, size);
 
       // update result value and size
-      kvm.value = data;
+      kvm.value = buffer;
       kvm.value_size = size;
     }
 
@@ -539,7 +524,7 @@ extern "C" {
     return kvm;
   }
 }
-const char *decode_pb2json(const char *protobuf, size_t n) {
+const char *decode_protobuf_to_json(const char *protobuf, size_t n) {
   logspec::LogLine msg;
 
   msg.ParseFromArray(protobuf, n);

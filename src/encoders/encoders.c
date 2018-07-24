@@ -1,5 +1,4 @@
 #include "encoders.h"
-#include "../log_api.h"
 
 struct KeyValueMsg default_kvm = { NULL, NULL, NULL, 0, 0 };
 
@@ -15,19 +14,19 @@ void free_kvm(struct KeyValueMsg* kvm) {
  * kvm is only valid if value is not null
  *
  */
-bool judge_kvm(const struct KeyValueMsg* kvm) {
+bool valid_kvm(const struct KeyValueMsg* kvm) {
   return kvm->value ? true : false;
 }
 
 encoder_type identity = &identity_encoder;
 
-encoder_type protobuf = &encode_json2pb;
+encoder_type protobuf = &encode_json_to_protobuf;
 
 encoder_type quote = &quote_encoder;
 
 encoder_type pb2tsvEncoder = &pb2tsv;
 
-encoder_type dynamic = &encode_json2pb_dynamic;
+encoder_type dynamic = &encode_json_to_protobuf_dynamic;
 
 encoder_type url_escape = &url_escape_encoder;
 
@@ -47,22 +46,26 @@ void print_encoder_names() {
   printf("%s\n", url_escape_conf_name);
 }
 
-encoder_type init_encoder_by_type(const char* option) {
+encoder_type select_encoder(const char* option) {
   if(option) {
     if (strncmp(option, protobuf_conf_name, sizeof(protobuf_conf_name)) == 0) {
+      printf("DSP Protobuf encoder selected\n");
       return protobuf;
     } else if (strncmp(option, identity_conf_name, sizeof(identity_conf_name)) == 0) {
+      printf("Identity encoder selected\n");
       return identity;
     } else if (strncmp(option, quote_conf_name, sizeof(quote_conf_name)) == 0) {
+      printf("Quote encoder selected\n");
       return quote;
     } else if (strncmp(option, protobuf_dynamic_conf_name, sizeof(protobuf_dynamic_conf_name)) == 0) {
-      //printf("Dynamic protobuf encoder selected\n");
-      lts_public_log_debug("Dynamic protobuf encoder selected!");
-      init_protobuf_by_pbfile();
+      printf("Dynamic protobuf encoder selected\n");
+      initalize_dynamic_protobuf();
       return dynamic;
     } else if (strncmp(option, url_escape_conf_name, sizeof(url_escape_conf_name)) == 0) {
+      printf("UrlEscape encoder selected\n");
       return url_escape;
     } else if (strncmp(option, pb2tsv_conf_name, sizeof(pb2tsv_conf_name)) == 0) {
+      printf("Pb2tsv encoder selected.\n");
       return pb2tsvEncoder;
     }
   }

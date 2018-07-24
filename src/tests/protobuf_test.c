@@ -31,9 +31,9 @@ void test_logline(void) {
   char* logline =
       "{\"t\": \"click\", \"ts\": \"1412235349.190\", \"cid\": \"12334354\"}";
   size_t size;
-  char* byte_array = encode_json2pb(logline, strlen(logline), &size);
+  char* byte_array = encode_json_to_protobuf(logline, strlen(logline), &size);
 
-  const char* result = decode_pb2json(byte_array, size);
+  const char* result = decode_protobuf_to_json(byte_array, size);
   // The field order is sometimes different from the original. Need to fix
 
   CU_ASSERT_STRING_EQUAL(logline, result);
